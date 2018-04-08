@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { signIn } from '../reducer';
 
-class SignIn extends React.Component {
+import { signUp } from '../../reducer';
+
+import './styles.scss';
+
+class SignUp extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -12,12 +14,6 @@ class SignIn extends React.Component {
       email: '',
       password: '',
     };
-  }
-
-  componentWillUpdate(props){
-    if (props.user !== undefined){
-      browserHistory.replace('home');
-    }
   }
 
   handleOnChange = event => {
@@ -28,7 +24,7 @@ class SignIn extends React.Component {
     event.preventDefault();
     const { dispatch } = this.props;
 
-    dispatch(signIn(this.state));
+    dispatch(signUp(this.state));
   };
 
   render() {
@@ -47,17 +43,13 @@ class SignIn extends React.Component {
             name="password"
             onChange={this.handleOnChange}
           />
-          <button type="submit">Sign In</button>
-        </form>
+          <button type="submit">Sign Up</button>
 
-        <Link to='/signup'> Нет аккаунта? </Link>
+          <Link to='/'> Есть аккаунт? </Link>
+        </form>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  user: state.user,
-});
-
-export default connect(mapStateToProps)(SignIn);
+export default connect()(SignUp);

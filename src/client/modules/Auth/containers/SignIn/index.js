@@ -1,10 +1,12 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { Link } from 'react-router-dom';
+import { signIn } from '../../reducer';
 
-import { signUp } from '../reducer';
+import './styles.scss';
 
-class SignUp extends PureComponent {
+class SignIn extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,6 +14,12 @@ class SignUp extends PureComponent {
       email: '',
       password: '',
     };
+  }
+
+  componentWillUpdate(props){
+    if (props.user !== undefined){
+      browserHistory.replace('home');
+    }
   }
 
   handleOnChange = event => {
@@ -22,7 +30,7 @@ class SignUp extends PureComponent {
     event.preventDefault();
     const { dispatch } = this.props;
 
-    dispatch(signUp(this.state));
+    dispatch(signIn(this.state));
   };
 
   render() {
@@ -41,13 +49,17 @@ class SignUp extends PureComponent {
             name="password"
             onChange={this.handleOnChange}
           />
-          <button type="submit">Sign Up</button>
-
-          <Link to='/'> Есть аккаунт? </Link>
+          <button type="submit">Sign In</button>
         </form>
+
+        <Link to='/signup'> Нет аккаунта? </Link>
       </div>
     );
   }
 }
 
-export default connect()(SignUp);
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(SignIn);
