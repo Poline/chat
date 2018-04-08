@@ -1,0 +1,12 @@
+DROP DATABASE IF EXISTS chat;
+CREATE DATABASE chat;
+
+\c chat
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email TEXT UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  last_login_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  password_hash TEXT
+);
