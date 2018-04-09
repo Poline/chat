@@ -15,7 +15,7 @@ class Auth extends PureComponent {
     const { dispatch } = this.props;
 
     if (Object.keys(this.props.user).length > 0) {
-      return <Redirect to='/home'/>;
+      return <Redirect to='/'/>;
     }
 
     return (
