@@ -5,8 +5,8 @@ const create = async user => {
   try {
     const passwordHash = await bcrypt.hash(user.password, 10);
     const data = await db.one(
-      'INSERT INTO users(email, password_hash) VALUES($1, $2) RETURNING email, last_login_at',
-      [user.email, passwordHash]
+      'INSERT INTO users(email, name, password_hash) VALUES($1, $2, $3) RETURNING email, last_login_at',
+      [user.email, user.name, passwordHash]
     );
     return data;
   } catch (e) {

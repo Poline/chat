@@ -6,6 +6,7 @@ CREATE DATABASE chat;
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   email TEXT UNIQUE,
+  name TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   last_login_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   password_hash TEXT
