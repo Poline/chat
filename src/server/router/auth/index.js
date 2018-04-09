@@ -21,14 +21,15 @@ router.post('/signup', bodyParser(), async ctx => {
 
 router.post('/signin', bodyParser(), async ctx => {
   try {
-    const userData = await user.authorize(ctx.request.body);
+    const userData = await user.login(ctx.request.body);
     userData.password_hash = undefined;
     userData.created_at = undefined;
     userData.id = undefined;
-    ctx.cookies.set('token', await token.create(userData), {
+    ctx.cookies.set('token', await token.create(userData, '1h'), {
       httpOnly: false,
       maxAge: 1000 * 60 * 60,
     });
+    ctx.status = 200;
     ctx.body = userData;
   } catch (e) {
     ctx.status = 404;
@@ -36,8 +37,21 @@ router.post('/signin', bodyParser(), async ctx => {
   }
 });
 
-router.post('/check', bodyParser(), token.validate, async ctx => {
-  ctx.body = 'WELCOME';
+
+router.get('/authorize', bodyParser(), async ctx => {
+  try {
+    const decodedToken = await token.decode(ctx.cookies.get('token'));
+    const userData = await user.authorize(decodedToken.data);
+    ctx.cookies.set('token', await token.create(userData, '1h'), {
+      httpOnly: false,
+      maxAge: 1000 * 60 * 60,
+    });
+    ctx.status = 200;
+    ctx.body = userData;
+  } catch (e) {
+    ctx.status = 401;
+    ctx.body = e.message;
+  }
 });
 
 module.exports = router;

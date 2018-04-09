@@ -6,6 +6,9 @@ import {
   SIGN_IN,
   SIGN_IN_SUCCEEDED,
   SIGN_IN_FAILED,
+  AUTHORIZE,
+  AUTHORIZE_SUCCEEDED,
+  AUTHORIZE_FAILED,
 } from '../reducer';
 
 function* signUp({ credentials }) {
@@ -56,30 +59,20 @@ function* signIn({ credentials }) {
   }
 }
 
-function* check() {
+function* authorize() {
   try {
-    const email = yield fetch('/api/auth/check', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+    const user = yield fetch('/api/auth/authorize', {
+      method: 'GET',
       credentials: 'same-origin',
-      method: 'post',
-      body: JSON.stringify({ foo: ' bar' }),
-    })
-      .then(res => res.json())
-      .catch(e => {
-        throw new Error(e.message);
-      });
-
-    console.log(email);
+    }).then((res) => res.json());
+    yield put({type: AUTHORIZE_SUCCEEDED, user});
   } catch (e) {
-    console.log(e.message);
+    yield put({type: AUTHORIZE_FAILED});
   }
 }
 
 export function* authSaga() {
   yield takeEvery(SIGN_UP, signUp);
   yield takeEvery(SIGN_IN, signIn);
-  yield takeEvery('CHECK', check);
+  yield takeEvery(AUTHORIZE, authorize);
 }

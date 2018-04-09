@@ -14,7 +14,7 @@ const create = async user => {
   }
 };
 
-const authorize = async user => {
+const login = async user => {
   try {
     const data = await db.one('SELECT * FROM users WHERE email=$1', [
       user.email,
@@ -24,7 +24,7 @@ const authorize = async user => {
       user.password,
       data.password_hash
     );
-
+    
     if (compareResult === true) {
       return Object.assign(
         data,
@@ -41,7 +41,19 @@ const authorize = async user => {
   }
 };
 
+const authorize = async user => {
+  try {
+    return await db.one(
+      'SELECT name, email, last_login_at FROM users WHERE email=$1',
+      [user.email]
+    );
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
 module.exports = {
   create,
   authorize,
+  login,
 };

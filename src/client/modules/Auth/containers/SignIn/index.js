@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { signIn } from '../../reducer';
 
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 import './styles.scss';
 
-class SignIn extends React.Component {
+class SignIn extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -16,12 +15,6 @@ class SignIn extends React.Component {
       email: '',
       password: '',
     };
-  }
-
-  componentWillUpdate(props){
-    if (props.user !== undefined){
-      browserHistory.replace('home');
-    }
   }
 
   handleOnChange = event => {
@@ -36,6 +29,10 @@ class SignIn extends React.Component {
   };
 
   render() {
+    if (Object.keys(this.props.user).length > 0) {
+      return <Redirect to='/home'/>;
+    }
+
     return (
       <div className="sign-in">
         <h1> Войдите в личный кабинет </h1>

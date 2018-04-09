@@ -1,23 +1,48 @@
-import React from 'react';
-import { Route } from 'react-router-dom';
+import React, { PureComponent } from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import SignUp from './containers/SignUp/index';
 import SignIn from './containers/SignIn/index';
 
-const Auth = ({ dispatch, children, match }) => {
-  debugger
-  return (
-    <div className="Auth">
+import { authorize } from './reducer';
+
+class Auth extends PureComponent {
+  componentWillMount(){
+    this.props.authorize();
+  }
+
+  render() {
+    const { dispatch } = this.props;
+
+    if (Object.keys(this.props.user).length > 0) {
+      return <Redirect to='/home'/>;
+    }
+
+    return (
+      <div className="Auth">
       <Route
-        path={`${match.url}/signup`}
+        path={`/auth/signup`}
         dispatch={dispatch}
         component={SignUp}
       />
       <Route
-        path={`${match.url}/signin`}
+        path={`/auth/signin`}
         dispatch={dispatch}
         component={SignIn}
       />
     </div>
-)}
+    );
+  }
+}
 
-export default Auth;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  authorize: () => {
+    dispatch(authorize());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

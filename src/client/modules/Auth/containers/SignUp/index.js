@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { signUp } from '../../reducer';
 
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
@@ -30,6 +30,10 @@ class SignUp extends PureComponent {
   };
 
   render() {
+    if (Object.keys(this.props.user).length > 0) {
+      return <Redirect to='/home'/>;
+    }
+
     return (
       <div className="sign-up">
         <h1> Регистрация </h1>
@@ -74,4 +78,8 @@ class SignUp extends PureComponent {
   }
 }
 
-export default connect()(SignUp);
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps)(SignUp);
