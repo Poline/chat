@@ -2,11 +2,11 @@ const router = require('koa-router')();
 const bodyParser = require('koa-bodyparser');
 const token = require('./token');
 
-const user = require('../../db/repositories/user');
+const auth = require('../../db/repositories/auth');
 
 router.post('/signup', bodyParser(), async ctx => {
   try {
-    const userData = await user.create(ctx.request.body);
+    const userData = await auth.create(ctx.request.body);
     ctx.cookies.set('token', await token.create(userData), {
       httpOnly: false,
       maxAge: 1000 * 60 * 60,
@@ -21,7 +21,7 @@ router.post('/signup', bodyParser(), async ctx => {
 
 router.post('/signin', bodyParser(), async ctx => {
   try {
-    const userData = await user.login(ctx.request.body);
+    const userData = await auth.login(ctx.request.body);
     userData.password_hash = undefined;
     userData.created_at = undefined;
     userData.id = undefined;
@@ -41,7 +41,7 @@ router.post('/signin', bodyParser(), async ctx => {
 router.get('/authorize', bodyParser(), async ctx => {
   try {
     const decodedToken = await token.decode(ctx.cookies.get('token'));
-    const userData = await user.authorize(decodedToken.data);
+    const userData = await auth.authorize(decodedToken.data);
     ctx.cookies.set('token', await token.create(userData, '1h'), {
       httpOnly: false,
       maxAge: 1000 * 60 * 60,

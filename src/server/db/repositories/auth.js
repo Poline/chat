@@ -52,6 +52,17 @@ const authorize = async user => {
   }
 };
 
+const getUsers = async user => {
+  try {
+    return await db.one(
+      'SELECT name, email, last_login_at FROM users',
+      [user.email]
+    );
+  } catch (e) {
+    throw new Error(e.message);
+  }
+};
+
 module.exports = {
   create,
   authorize,

@@ -11,6 +11,10 @@ class UsersListModal extends PureComponent {
 
     this.closeModal = this.closeModal.bind(this);
     this.createChat = this.createChat.bind(this);
+
+    this.state = {
+      user: null,
+    };
   }
 
   componentWillMount(){
@@ -22,20 +26,25 @@ class UsersListModal extends PureComponent {
   }
 
   createChat(){
+    const user = this.state;
 
+    if (user !== null){
+      // this.props.createChat();
+    }
   }
 
   render() {
-    const { usersList } = this.props;
+    const { usersList } = this.props,
+      { user } = this.state;
 
     return (
       <div className='modal'>
         <div className='modal__dialog'>
           <div className='modal__header'>Создание беседы</div>
           <div className='modal__body'>
-            {usersList && usersList.map && usersList.map((user, index) => (
-              <div key={`user-${index}`}>
-                {user.name} {user.email} {user.last_seen}
+            {usersList && usersList.map && usersList.map((userEl, index) => (
+              <div key={`user-${index}`} onClick={()=>{this.setState({user: userEl.email})}} className={user === userEl.email ? 'selected' : null} >
+                {userEl.name} {userEl.email} {userEl.last_seen}
               </div>
             ))}
           </div>
