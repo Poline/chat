@@ -8,13 +8,15 @@ import { authorize } from '../../reducers/user';
 
 class Auth extends PureComponent {
   componentWillMount(){
-    this.props.authorize();
+    if (this.props.user.name === null) {
+      this.props.authorize();
+    }
   }
 
   render() {
     const { dispatch } = this.props;
-
-    if (Object.keys(this.props.user).length > 0) {
+    
+    if (this.props.user.name !== null) {
       return <Redirect to='/'/>;
     }
 

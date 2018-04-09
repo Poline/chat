@@ -13,26 +13,28 @@ export const LOGOUT_SUCCEEDED = 'LOGOUT_SUCCEEDED';
 export const LOGOUT_FAILED = 'LOGOUT_FAILED';
 
 //REDUCER
-export default function reducer(state = {}, action = {}) {
+const user = (state = {name: null, email: null, last_login_at: null }, action) => {
   switch (action.type) {
-    case SIGN_UP_SUCCEEDED: return action.user
-    case SIGN_IN_SUCCEEDED: return action.user
-    case AUTHORIZE_SUCCEEDED: return action.user
-    case LOGOUT_SUCCEEDED: return {}
+    case SIGN_UP_SUCCEEDED: return Object.assign({}, state, action.user);
+    case SIGN_IN_SUCCEEDED: return Object.assign({}, state, action.user);
+    case AUTHORIZE_SUCCEEDED: return Object.assign({}, state, action.user);
+    case LOGOUT_SUCCEEDED: return {name: null, email: null, last_login_at: null }
     default: return state;
   }
 }
 
 //ACTIONS
-export function signUp(credentials) {
+export const signUp = (credentials) => {
   return { type: SIGN_UP, credentials };
 }
-export function signIn(credentials) {
+export const signIn = (credentials) => {
   return { type: SIGN_IN, credentials };
 }
-export function authorize() {
+export const authorize = () => {
   return { type: AUTHORIZE };
 }
-export function logout() {
+export const logout = () => {
   return { type: LOGOUT };
 }
+
+export default user;

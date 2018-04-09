@@ -90,10 +90,11 @@ function* logout() {
   }
 }
 
-
-export function* userSaga() {
+function* userSaga() {
   yield takeEvery(SIGN_UP, signUp);
   yield takeEvery(SIGN_IN, signIn);
   yield takeEvery(AUTHORIZE, authorize);
   yield takeEvery(LOGOUT, logout);
 }
+
+export default userSaga;
