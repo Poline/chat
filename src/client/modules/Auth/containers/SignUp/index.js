@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { signUp } from '../../reducer';
+import { signUp } from '../../../../reducers/user';
 
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 

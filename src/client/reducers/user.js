@@ -5,12 +5,20 @@ export const SIGN_UP_FAILED = 'SIGN_UP_FAILED';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_IN_SUCCEEDED = 'SIGN_IN_SUCCEEDED';
 export const SIGN_IN_FAILED = 'SIGN_IN_FAILED';
+export const AUTHORIZE = 'AUTHORIZE';
+export const AUTHORIZE_SUCCEEDED = 'AUTHORIZE_SUCCEEDED';
+export const AUTHORIZE_FAILED = 'AUTHORIZE_FAILED';
+export const LOGOUT = 'LOGOUT';
+export const LOGOUT_SUCCEEDED = 'LOGOUT_SUCCEEDED';
+export const LOGOUT_FAILED = 'LOGOUT_FAILED';
 
 //REDUCER
 export default function reducer(state = {}, action = {}) {
   switch (action.type) {
     case SIGN_UP_SUCCEEDED: return action.user
     case SIGN_IN_SUCCEEDED: return action.user
+    case AUTHORIZE_SUCCEEDED: return action.user
+    case LOGOUT_SUCCEEDED: return {}
     default: return state;
   }
 }
@@ -21,4 +29,10 @@ export function signUp(credentials) {
 }
 export function signIn(credentials) {
   return { type: SIGN_IN, credentials };
+}
+export function authorize() {
+  return { type: AUTHORIZE };
+}
+export function logout() {
+  return { type: LOGOUT };
 }

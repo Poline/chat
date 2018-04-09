@@ -54,4 +54,9 @@ router.get('/authorize', bodyParser(), async ctx => {
   }
 });
 
+router.get('/logout', bodyParser(), async ctx => {
+  ctx.cookies.set('token', null);
+  ctx.status = 200;
+});
+
 module.exports = router;

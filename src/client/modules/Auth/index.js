@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import SignUp from './containers/SignUp/index';
 import SignIn from './containers/SignIn/index';
 
-import { authorize } from './reducer';
+import { authorize } from '../../reducers/user';
 
 class Auth extends PureComponent {
   componentWillMount(){

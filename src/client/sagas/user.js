@@ -6,7 +6,13 @@ import {
   SIGN_IN,
   SIGN_IN_SUCCEEDED,
   SIGN_IN_FAILED,
-} from '../reducer';
+  AUTHORIZE,
+  AUTHORIZE_SUCCEEDED,
+  AUTHORIZE_FAILED,
+  LOGOUT,
+  LOGOUT_SUCCEEDED,
+  LOGOUT_FAILED,
+} from '../reducers/user';
 
 function* signUp({ credentials }) {
   try {
@@ -56,30 +62,38 @@ function* signIn({ credentials }) {
   }
 }
 
-function* check() {
+function* authorize() {
   try {
-    const email = yield fetch('/api/auth/check', {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+    const user = yield fetch('/api/auth/authorize', {
+      method: 'GET',
       credentials: 'same-origin',
-      method: 'post',
-      body: JSON.stringify({ foo: ' bar' }),
-    })
-      .then(res => res.json())
-      .catch(e => {
-        throw new Error(e.message);
-      });
-
-    console.log(email);
+    }).then((res) => res.json());
+    yield put({type: AUTHORIZE_SUCCEEDED, user});
   } catch (e) {
-    console.log(e.message);
+    yield put({type: AUTHORIZE_FAILED});
   }
 }
 
-export function* authSaga() {
+function* logout() {
+  try {
+    const res = yield fetch('/api/auth/logout', {
+      method: 'GET',
+      credentials: 'same-origin',
+    });
+    if (res.status === 200) {
+      yield put({type: LOGOUT_SUCCEEDED});
+    } else {
+      yield put({type: LOGOUT_FAILED});
+    }
+  } catch (e) {
+    yield put({type: LOGOUT_FAILED});
+  }
+}
+
+
+export function* userSaga() {
   yield takeEvery(SIGN_UP, signUp);
   yield takeEvery(SIGN_IN, signIn);
-  yield takeEvery('CHECK', check);
+  yield takeEvery(AUTHORIZE, authorize);
+  yield takeEvery(LOGOUT, logout);
 }
