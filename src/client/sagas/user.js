@@ -29,8 +29,7 @@ function* signUp({ credentials }) {
       .catch(e => {
         throw new Error(e.message);
       });
-
-    console.log(user);
+      console.log
     yield put({type: SIGN_UP_SUCCEEDED, user});
   } catch (e) {
     console.log(e.message);
@@ -53,8 +52,6 @@ function* signIn({ credentials }) {
       .catch(e => {
         throw new Error(e.message);
       });
-
-    console.log(user);
     yield put({type: SIGN_IN_SUCCEEDED, user});
   } catch (e) {
     console.log(e.message);

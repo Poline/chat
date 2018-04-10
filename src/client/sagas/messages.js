@@ -23,6 +23,7 @@ function* getMessages({ credentials }) {
       .catch(e => {
         throw new Error(e.message);
       });
+    
     yield put({type: GET_MESSAGES_SUCCEEDED, messages});
   } catch (e) {
     console.log(e.message);

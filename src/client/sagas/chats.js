@@ -23,7 +23,6 @@ function* create({ credentials }) {
       .catch(e => {
         throw new Error(e.message);
       });
-    console.log(chats);
     yield put({type: CREATE_CHAT_SUCCEEDED, chats});
   } catch (e) {
     console.log(e.message);

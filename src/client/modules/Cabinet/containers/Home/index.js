@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
 import CreateChatModal from '../CreateChatModal';
+import Chat from '../Chat';
 
 import { logout } from '../../../../reducers/user';
 import { getChats } from '../../../../reducers/chats';
@@ -12,11 +13,14 @@ class Home extends React.Component {
 
     this.state = {
       isCreateChatModalOpen: false,
+      openChat: false,
+      currentChat: {},
     };
 
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.logout = this.logout.bind(this);
+    this.closeChat = this.closeChat.bind(this);
   }
 
   componentWillMount(){
@@ -33,14 +37,25 @@ class Home extends React.Component {
     this.setState({isCreateChatModalOpen: false});
   }
 
+  openChat(currentChat){
+    this.setState({
+      openChat: true,
+      currentChat: currentChat,
+    });
+  }
+
+  closeChat(){
+    this.setState({openChat: false});
+  }
+
   logout(){
     this.props.logout();
   }
 
   render() {
-    const { isCreateChatModalOpen } = this.state,
+    const { isCreateChatModalOpen, openChat, currentChat } = this.state,
       { chats } = this.props;
-    console.log(chats)
+    
     return (
       <div className="home">
         <Button color="primary" onClick={this.logout}>
@@ -53,8 +68,12 @@ class Home extends React.Component {
           <CreateChatModal closeModal={this.closeModal}/>
         }
         {chats && chats.map((chat, chatId) => {
-          return(<div key={`chat-${chatId}`}> {chat.chat_name} </div>)
+          return(<div key={`chat-${chatId}`} onClick={()=>{this.openChat(chat)}}> {chat.chat_name} </div>)
         })}
+
+        {openChat &&
+          <Chat closeChat={this.closeChat} currentChat={currentChat} />
+        }
       </div>
     );
   }

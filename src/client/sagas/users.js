@@ -11,7 +11,6 @@ function* getUsers( ) {
       method: 'GET',
       credentials: 'same-origin',
     }).then((res) => res.json());
-    console.log(users);
     yield put({type: GET_USERS_SUCCEEDED, users});
   } catch (e) {
     console.log(e.message);

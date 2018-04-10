@@ -19,6 +19,10 @@ const getMessages = async id => {
 
 const addMessage = async (message, chatId, userId) => {
   try {
+    console.log('there')
+    console.log('message', message)
+    console.log('chatId', chatId)
+    console.log('userId', userId)
     const data = await db.one(
       'INSERT INTO messages(chat_id, from_user, message_text) VALUES($1, $2, $3) RETURNING id',
       [chatId, chatId, message]
@@ -34,5 +38,6 @@ const addMessage = async (message, chatId, userId) => {
 
 
 module.exports = {
-    getMessages
+  getMessages,  
+  addMessage
 };
