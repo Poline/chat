@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Button, FormGroup, Label, Input } from 'reactstrap';
 import './styles.scss';
 
 import { getUsers } from '../../../../reducers/users';
+import { createChat } from '../../../../reducers/chats';
 
-class UsersListModal extends PureComponent {
+class CreateChatModal extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -14,6 +15,7 @@ class UsersListModal extends PureComponent {
 
     this.state = {
       user: null,
+      name: 'Chat name',
     };
   }
 
@@ -26,22 +28,41 @@ class UsersListModal extends PureComponent {
   }
 
   createChat(){
-    const user = this.state;
-
-    if (user !== null){
-      // this.props.createChat();
+    const chatData = {
+      name: this.state.name,
+      first_user_email: this.props.userEmail,
+      second_user_email: this.state.user,
+    };
+    
+    if (chatData.second_user_email !== null){
+      this.props.createChat(chatData);
+      this.props.closeModal();
     }
   }
 
+  handleOnChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
   render() {
     const { usersList } = this.props,
-      { user } = this.state;
+      { user, name } = this.state;
 
     return (
       <div className='modal'>
         <div className='modal__dialog'>
           <div className='modal__header'>Создание беседы</div>
           <div className='modal__body'>
+            <FormGroup>
+              <Label for="name">Название беседы</Label>
+              <Input
+                type="text"
+                value={name}
+                name="name"
+                onChange={this.handleOnChange}
+              />
+            </FormGroup>
+
             {usersList && usersList.map && usersList.map((userEl, index) => (
               <div key={`user-${index}`} onClick={()=>{this.setState({user: userEl.email})}} className={user === userEl.email ? 'selected' : null} >
                 {userEl.name} {userEl.email} {userEl.last_seen}
@@ -60,12 +81,16 @@ class UsersListModal extends PureComponent {
 
 const mapStateToProps = (state) => ({
   usersList: state.users.list,
+  userEmail: state.user.email,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   getUsers: () => {
     dispatch(getUsers());
   },
+  createChat: (credentials) => {
+    dispatch(createChat(credentials));
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersListModal);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateChatModal);

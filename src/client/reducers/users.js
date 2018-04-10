@@ -5,8 +5,6 @@ export const GET_USERS_FAILED = 'GET_USERS_FAILED';
 
 //REDUCER
 const users = (state = {list: []}, action) => {
-  debugger
-  console.log('i am here')
   switch (action.type) {
     case GET_USERS_SUCCEEDED: return {list: action.users}
     default: return state;

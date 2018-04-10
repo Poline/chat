@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
-import UsersListModal from '../UsersListModal';
+import CreateChatModal from '../CreateChatModal';
 
 import { logout } from '../../../../reducers/user';
+import { getChats } from '../../../../reducers/chats';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      isUsersModalOpen: false,
+      isCreateChatModalOpen: false,
     };
 
     this.openModal = this.openModal.bind(this);
@@ -18,12 +19,18 @@ class Home extends React.Component {
     this.logout = this.logout.bind(this);
   }
 
+  componentWillMount(){
+    if (this.props.chats.length === 0){
+      this.props.getChats({user_email: this.props.user.email});
+    }
+  }
+
   openModal(){
-    this.setState({isUsersModalOpen: true});
+    this.setState({isCreateChatModalOpen: true});
   }
 
   closeModal(){
-    this.setState({isUsersModalOpen: false});
+    this.setState({isCreateChatModalOpen: false});
   }
 
   logout(){
@@ -31,8 +38,9 @@ class Home extends React.Component {
   }
 
   render() {
-    const { isUsersModalOpen } = this.state;
-
+    const { isCreateChatModalOpen } = this.state,
+      { chats } = this.props;
+    console.log(chats)
     return (
       <div className="home">
         <Button color="primary" onClick={this.logout}>
@@ -41,9 +49,12 @@ class Home extends React.Component {
         <Button color="primary" onClick={this.openModal}>
           Новый чат
         </Button>
-        {isUsersModalOpen &&
-          <UsersListModal closeModal={this.closeModal}/>
+        {isCreateChatModalOpen &&
+          <CreateChatModal closeModal={this.closeModal}/>
         }
+        {chats && chats.map((chat, chatId) => {
+          return(<div key={`chat-${chatId}`}> {chat.chat_name} </div>)
+        })}
       </div>
     );
   }
@@ -51,11 +62,15 @@ class Home extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  chats: state.chats,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   logout: (credentials) => {
     dispatch(logout(credentials));
+  },
+  getChats: (credentials) => {
+    dispatch(getChats(credentials));
   },
 });
 
