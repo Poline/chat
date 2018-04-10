@@ -1,16 +1,16 @@
 import { put, takeEvery } from 'redux-saga/effects';
 import {
-  CREATE_CHAT,
-  CREATE_CHAT_SUCCEEDED,
-  CREATE_CHAT_FAILED,
-  GET_CHATS,
-  GET_CHATS_SUCCEEDED,
-  GET_CHATS_FAILED,
-} from '../reducers/chats';
+  GET_MESSAGES,
+  GET_MESSAGES_SUCCEEDED,
+  GET_MESSAGES_FAILED,
+  SEND_MESSAGE,
+  SEND_MESSAGE_SUCCEEDED,
+  SEND_MESSAGE_FAILED,
+} from '../reducers/messages';
 
-function* create({ credentials }) {
+function* getMessages({ credentials }) {
   try {
-    const chats = yield fetch('/api/chats/create', {
+    const messages = yield fetch('/api/messages/get', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -23,19 +23,17 @@ function* create({ credentials }) {
       .catch(e => {
         throw new Error(e.message);
       });
-    console.log(chats);
-    yield put({type: CREATE_CHAT_SUCCEEDED, chats});
+    yield put({type: GET_MESSAGES_SUCCEEDED, messages});
   } catch (e) {
     console.log(e.message);
-    yield put({type: CREATE_CHAT_FAILED});
+    yield put({type: GET_MESSAGES_FAILED});
   }
 }
 
 
-function* getChats({ credentials }) {
+function* sendMessage({ credentials }) {
   try {
-    
-    const chats = yield fetch('/api/chats/get', {
+    const messages = yield fetch('/api/messages/sendmessage', {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -48,17 +46,16 @@ function* getChats({ credentials }) {
       .catch(e => {
         throw new Error(e.message);
       });
-
-    yield put({type: GET_CHATS_SUCCEEDED, chats});
+    yield put({type: SEND_MESSAGE_SUCCEEDED, messages});
   } catch (e) {
     console.log(e.message);
-    yield put({type: GET_CHATS_FAILED});
+    yield put({type: SEND_MESSAGE_FAILED});
   }
 }
 
-function* chatsSaga() {
-  yield takeEvery(CREATE_CHAT, create);
-  yield takeEvery(GET_CHATS, getChats);
+function* messagesSaga() {
+  yield takeEvery(GET_MESSAGES, getMessages);
+  yield takeEvery(SEND_MESSAGE, sendMessage);
 }
 
-export default chatsSaga;
+export default messagesSaga;

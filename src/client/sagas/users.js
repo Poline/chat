@@ -5,7 +5,7 @@ import {
   GET_USERS_FAILED,
 } from '../reducers/users';
 
-function* getUsers({ credentials }) {
+function* getUsers( ) {
   try {
     const users = yield fetch('/api/users/userslist', {
       method: 'GET',
