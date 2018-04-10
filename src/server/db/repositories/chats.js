@@ -31,12 +31,6 @@ const getChats = async id => {
     let chatsWithUsersInfo = [];
 
     await Promise.map(chats, async (chat) => {
-        const first_user = await users.getUser(chat.first_user_id);
-
-        chat.first_user_email = first_user.email;
-        chat.first_user_name = first_user.name;
-        chat.last_login_at = first_user.last_login_at
-
         const second_user = await users.getUser(chat.second_user_id);
 
         chat.second_user_email = first_user.email;
@@ -53,8 +47,22 @@ const getChats = async id => {
   }
 }
 
+const getChatId = async chat => {
+  try {
+    const chatId = await db.any(
+      'SELECT id FROM chats WHERE first_user_id=$1, second_user_id=$2, chat_name=$1', [
+        chat.first_user_id, chat.second_user_id, chat.chat_name,
+      ]
+    );
+
+    return chatId;
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
 
 module.exports = {
     create,
-    getChats
+    getChats,
+    getChatId
 };

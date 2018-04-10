@@ -13,5 +13,6 @@ CREATE TABLE messages (
   chat_id INT REFERENCES chats(id) ON DELETE CASCADE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   from_user INT REFERENCES users(id),
+  message_text TEXT,
   is_readed BOOLEAN
 );
