@@ -32,10 +32,15 @@ const getChats = async id => {
 
     await Promise.map(chats, async (chat) => {
         const second_user = await users.getUser(chat.second_user_id);
+        const first_user = await users.getUser(chat.first_user_id);
 
         chat.second_user_email = second_user.email;
         chat.second_user_name = second_user.name;
-        chat.second_login_at = second_user.last_login_at
+        chat.second_login_at = second_user.last_login_at;
+
+        chat.first_user_email = first_user.email;
+        chat.first_user_name = first_user.name;
+        chat.first_login_at = first_user.last_login_at;
 
         chatsWithUsersInfo.push(chat);
       }
@@ -54,6 +59,8 @@ const getChatId = async (first_user_id, second_user_id, chat_name) => {
         chat_name, first_user_id, second_user_id,
       ]
     );
+
+    console.log('chatId')
     return chatId;
   } catch (e) {
     throw new Error(e.message);

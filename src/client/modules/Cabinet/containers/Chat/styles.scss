@@ -10,9 +10,20 @@
     background-color: rgba(0, 0, 0, 0.5);
     &__dialog{
         max-width: 500px;
-        margin: 1.75rem auto;
+        margin: 50px auto;
         background: #fff;
         padding: 20px;
         border-radius: 4px;
+    }
+    .message-author{
+        font-weight: bold;
+        display: inline-block;
+    }
+    .message-time{
+        display: inline-block;
+        margin-left: 20px;
+    }
+    .message-text{
+        margin-top: 10px;
     }
 }

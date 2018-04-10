@@ -8,6 +8,7 @@ const user = require('../../db/repositories/users');
 router.post('/get', bodyParser(), async ctx => {
   try {
     const data = ctx.request.body;
+    
     const first_user_id = await user.getUserId(data.first_user_email);
     const second_user_id = await user.getUserId(data.second_user_email);
     const chatId = await chats.getChatId(first_user_id.id, second_user_id.id, data.chat_name);
@@ -26,9 +27,10 @@ router.post('/sendmessage', bodyParser(), async ctx => {
     const data = ctx.request.body;
     const first_user_id = await user.getUserId(data.first_user_email);
     const second_user_id = await user.getUserId(data.second_user_email);
+    const current_user_id = data.current_user_email === data.first_user_email ? first_user_id : second_user_id;
     const chatId = await chats.getChatId(first_user_id.id, second_user_id.id, data.chat_name);
 
-    const messagesList = await messages.addMessage(data.message, chatId.id, first_user_id.id);
+    const messagesList = await messages.addMessage(data.message, chatId.id, current_user_id.id);
     
     ctx.status = 200;
     ctx.body = messagesList;

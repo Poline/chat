@@ -10,8 +10,16 @@ const getMessages = async id => {
         id,
       ]
     );
-    
-    return messages;
+
+    let messagesList = [];
+
+    await Promise.map(messages, async (message) => {
+      const from_user = await users.getUser(message.from_user);
+      message.from_user_email = from_user.email;
+      messagesList.push(message);
+    })
+
+    return messagesList;
   } catch (e) {
     throw new Error(e.message);
   }
@@ -19,15 +27,10 @@ const getMessages = async id => {
 
 const addMessage = async (message, chatId, userId) => {
   try {
-    console.log('there')
-    console.log('message', message)
-    console.log('chatId', chatId)
-    console.log('userId', userId)
     const data = await db.one(
       'INSERT INTO messages(chat_id, from_user, message_text) VALUES($1, $2, $3) RETURNING id',
-      [chatId, chatId, message]
+      [chatId, userId, message]
     );
-
     const messages = getMessages(chatId);
 
     return messages;

@@ -1,5 +1,20 @@
 @import '../../../../imports';
 
 .home{
-
+    max-width: 780px;
+    margin: 10px auto;
+    
+    &__logout-button{
+        float: right;
+    }
+    &__chat-name{
+        font-weight: bold;
+    }
+    &__chat-friend-name{
+        display: inline-block;
+        margin-left: 30px;
+    }
+    .list-group-item{
+        cursor: pointer;
+    }
 }
