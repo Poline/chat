@@ -10,10 +10,12 @@
     &__chat-name{
         font-weight: bold;
     }
+    &__chat-time,
     &__chat-friend-name{
         display: inline-block;
         margin-left: 30px;
     }
+    
     .list-group-item{
         cursor: pointer;
     }

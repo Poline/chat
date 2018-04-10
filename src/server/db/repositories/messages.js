@@ -6,7 +6,7 @@ const users = require('./users');
 const getMessages = async id => {
   try {
     const messages = await db.any(
-      'SELECT * FROM messages WHERE chat_id=$1', [
+      'SELECT * FROM messages WHERE chat_id=$1 ORDER BY created_at ASC', [
         id,
       ]
     );

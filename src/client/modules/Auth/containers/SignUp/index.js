@@ -26,6 +26,12 @@ class SignUp extends PureComponent {
     event.preventDefault();
 
     this.props.signUp(this.state);
+
+    this.setState({
+      email: '',
+      password: '',
+      name: '',
+    });
   };
 
   render() {

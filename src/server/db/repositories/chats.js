@@ -24,7 +24,7 @@ const create = async chat => {
 const getChats = async id => {
   try {
     const chats = await db.any(
-      'SELECT * FROM chats WHERE first_user_id=$1 or second_user_id=$1', [
+      'SELECT * FROM chats WHERE first_user_id=$1 or second_user_id=$1 ORDER BY created_at ASC', [
         id,
       ]
     );

@@ -82,6 +82,9 @@ class Home extends React.Component {
                 <span className='home__chat-friend-name'>
                   собеседник {chat.second_user_email === user.email ? chat.first_user_name : chat.second_user_name}
                 </span>
+                <span className='home__chat-time'>
+                  создан {new Date(chat.created_at).toLocaleTimeString()}
+                </span>
               </ListGroupItem>)
           })}
         </ListGroup>
