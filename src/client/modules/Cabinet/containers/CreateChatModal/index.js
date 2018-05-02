@@ -14,7 +14,7 @@ class CreateChatModal extends PureComponent {
     this.createChat = this.createChat.bind(this);
 
     this.state = {
-      user: null,
+      users: [],
       name: 'Chat name',
     };
   }
@@ -40,13 +40,17 @@ class CreateChatModal extends PureComponent {
     }
   }
 
+  clickOnEmail(){
+    const { users } = this.state;
+  }
+
   handleOnChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
     const { usersList, userEmail } = this.props,
-      { user, name } = this.state;
+      { users, name } = this.state;
 
     return (
       <div className='modal'>
@@ -63,14 +67,16 @@ class CreateChatModal extends PureComponent {
               />
             </FormGroup>
 
-            <h4>Выберите собеседника </h4>
+            <h4>Выберите собеседников </h4>
 
             {usersList && usersList.map && usersList.map((userEl, index) => {
               if (userEmail !== userEl.email){
                 return(
                   <div key={`user-${index}`}
-                    onClick={()=>{this.setState({user: userEl.email})}}
-                    className={user === userEl.email ? 'user-item selected' : 'user-item'}
+                    onClick={()=>{
+                      this.setState({user: this.state.users.push(userEl.email)})}
+                    }
+                    className={users.filter((email)=>email === userEl.email).length > 0 ? 'user-item selected' : 'user-item'}
                   >
                     {userEl.name} {userEl.email} {userEl.last_seen}
                   </div>

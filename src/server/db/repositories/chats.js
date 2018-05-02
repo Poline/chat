@@ -59,8 +59,7 @@ const getChatId = async (first_user_id, second_user_id, chat_name) => {
         chat_name, first_user_id, second_user_id,
       ]
     );
-
-    console.log('chatId')
+    
     return chatId;
   } catch (e) {
     throw new Error(e.message);
