@@ -12,11 +12,16 @@ class CreateChatModal extends PureComponent {
 
     this.closeModal = this.closeModal.bind(this);
     this.createChat = this.createChat.bind(this);
+    this.clickOnEmail = this.clickOnEmail.bind(this);
 
     this.state = {
-      users: [],
+      users: [this.props.userEmail],
       name: 'Chat name',
     };
+  }
+
+  shouldComponentUpdate(){
+    return true;
   }
 
   componentWillMount(){
@@ -30,18 +35,32 @@ class CreateChatModal extends PureComponent {
   createChat(){
     const chatData = {
       name: this.state.name,
-      first_user_email: this.props.userEmail,
-      second_user_email: this.state.user,
+      creator: this.props.userEmail,
+      users: this.state.users,
     };
-    
-    if (chatData.second_user_email !== null){
+    debugger
+    if (chatData.users.length > 1){
       this.props.createChat(chatData);
       this.props.closeModal();
     }
   }
 
-  clickOnEmail(){
-    const { users } = this.state;
+  clickOnEmail(email){
+    let { users } = this.state,
+      index;
+    
+    if (users.filter((userEmail, userIndex) => {
+      if (userEmail === email){
+        index = userIndex;
+        return true;
+      }
+    }).length === 0){
+      users.push(email);
+      this.setState({users: users});
+    } else{
+      users.splice(index, 1);
+      this.setState({users: users});
+    }
   }
 
   handleOnChange = event => {
@@ -74,8 +93,8 @@ class CreateChatModal extends PureComponent {
                 return(
                   <div key={`user-${index}`}
                     onClick={()=>{
-                      this.setState({user: this.state.users.push(userEl.email)})}
-                    }
+                      this.clickOnEmail(userEl.email)
+                    }}
                     className={users.filter((email)=>email === userEl.email).length > 0 ? 'user-item selected' : 'user-item'}
                   >
                     {userEl.name} {userEl.email} {userEl.last_seen}
